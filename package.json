@@ -1,0 +1,21 @@
+{
+  "name": "midulive-react-course",
+  "version": "1.0.0",
+  "description": "* 01 - Introducción a React * 02 -  * Enlaces de interés",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrialvarezcorrea/midulive-react-course.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/adrialvarezcorrea/midulive-react-course/issues"
+  },
+  "homepage": "https://github.com/adrialvarezcorrea/midulive-react-course#readme"
+}

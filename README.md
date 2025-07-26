@@ -178,3 +178,26 @@ const element = <strong>Numero aleatorio. {Math.random()}</strong>
 
 ### Crea tu primera aplicación con React
 Para poder trabajar con React y JSX, necesitamos un empaquetador de aplicaciones web. [Create React App](https://create-react-app.dev/) es la forma oficial, pero [Vite](https://vite.dev/) funciona mejor.
+
+Un componente es una función que devuelve un elemento. El nombre del componente debe ir en <code>PascalCase</code> para que React pueda diferenciar entre elementos HTML y Componentes de React. Además, debe evitarse el uso de nombres imperativos como <code>CreateButton</code>.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
+
+const Button = ({text}) => {
+  return (
+    <button>{text}</button>
+  )
+}
+
+root.render(
+  <React.Fragment>
+    <Button text="Button 1" />
+    <Button text="Button 2" />
+    <Button text="Button 3" />
+  </React.Fragment>
+)
+````
