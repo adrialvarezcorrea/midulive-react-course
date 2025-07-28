@@ -31,22 +31,22 @@ Ejemplo de enfoque imperativo con HTML y Vanilla JavaScript:
 const buttons = document.querySelectorAll('button');
 
 buttons.forEach(button => {
-    // al hacer click en el botón, tenemos que ejecutar una función
-    button.addEventListener('click', function() {
-    // recuperar la id del atributo del HTML
-    const id = button.getAttribute('data-id');
+  // al hacer click en el botón, tenemos que ejecutar una función
+  button.addEventListener('click', function() {
+  // recuperar la id del atributo del HTML
+  const id = button.getAttribute('data-id');
 
-    // llamar a un servicio para actualizar si me gusta
-    // toggleLike(id)
+  // llamar a un servicio para actualizar si me gusta
+  // toggleLike(id)
 
-    if (button.classList.contains('liked')){
-        button.classList.remove('liked');
-        button.innterText = 'Me guta';
-    } else {
-        button.classList.add('liked');
-        button.innerText = 'Quitar me gusta';
-        }
-    })
+  if (button.classList.contains('liked')){
+      button.classList.remove('liked');
+      button.innterText = 'Me guta';
+  } else {
+      button.classList.add('liked');
+      button.innerText = 'Quitar me gusta';
+      }
+  })
 })
 ```
 ### Basado en componentes
@@ -142,11 +142,11 @@ const appDomElement = document.getElementById('app');
 const root = ReactDOM.createRoot(appDomElement);
 
 const app = (
-    <React.Fragment>
-        <button data-id="123">Button 1</button>
-        <button data-id="456">Button 2</button>
-        <button data-id="789">Button 3</button>
-    </React.Fragment>
+  <React.Fragment>
+    <button data-id="123">Button 1</button>
+    <button data-id="456">Button 2</button>
+    <button data-id="789">Button 3</button>
+  </React.Fragment>
 );
 
 root.render(app);
@@ -176,10 +176,17 @@ const element = <strong>Numero aleatorio. {Math.random()}</strong>
 <button tabIndex="1">
 ```
 
+Comentarios en JSX:
+```jsx
+{ /* aquí un comentario */ }
+```
+
 ### Crea tu primera aplicación con React
 Para poder trabajar con React y JSX, necesitamos un empaquetador de aplicaciones web. [Create React App](https://create-react-app.dev/) es la forma oficial, pero [Vite](https://vite.dev/) funciona mejor.
 
-Un componente es una función que devuelve un elemento. El nombre del componente debe ir en <code>PascalCase</code> para que React pueda diferenciar entre elementos HTML y Componentes de React. Además, debe evitarse el uso de nombres imperativos como <code>CreateButton</code>.
+Un componente es una función que devuelve un elemento. Su nombre debe ser declarativo, evitando estilos imperativos como CreateButton. Además, debe escribirse en formato <code>PascalCase</code> para que React pueda distinguirlo de los elementos HTML.
+
+Un componente es una factoría de elementos, es decir, un componente es una función que al ejecutarla devuelve elementos. Los elementos son los que renderiza React.
 
 ```js
 import React from 'react'
@@ -200,4 +207,286 @@ root.render(
     <Button text="Button 3" />
   </React.Fragment>
 )
-````
+```
+
+### Crear un componente
+1. Creamos un archivo App.jsx en el que renderizaremos la aplicación.
+```jsx
+// 📁 src/App.jsx
+import './App.css'
+import { TwitterFollowCard } from './TwitterFollowCard'
+
+//Aquí isFollowing, name y userName son props.
+export function App () {
+  return (
+    <section className="App">
+      <TwitterFollowCard isFollowing name="Adri Álvarez" userName="alvarezAdri_"/>
+      <TwitterFollowCard isFollowing={false} name="Miguel Ángel Durán" userName="midudev"/>
+    </section>
+  )
+}
+```
+
+2. Creamos nuestro componente. Como JSX se transforma en JavaScript y <code>class</code> es una palabra reservada en JavaScript, utilizaremos <code>className</code> para añadir estilos. Los estilos se definirán en 📁 src/App.css. 
+
+```jsx
+// 📁 src/TwitterFollowCard.jsx
+export function TwitterFollowCard ({ name, userName, isFollowing }) {
+  return (
+      <article className='tw-followCard'>
+      <header className='tw-followCard-header'>
+          <img className='tw-followCard-avatar' alt="El avatar de Adri" src={`/avatar-${userName}.jpg`} />
+          <div className='tw-followCard-info'>
+              <strong>{name}</strong>
+              <span className='tw-followCard-infoUserName'>@{userName}</span>
+          </div>
+      </header>
+
+      <aside>
+          <button className='tw-followCard-button'>
+              Seguir
+          </button>
+      </aside>
+    </article>
+  )
+}
+```
+
+### Props/ propiedades
+Las props son los datos que se pasan a un elemento JSX. Por ejemplo, <code>className</code>, <code>scr</code>, <code>alt</code>, <code>height</code> y <code>width</code> son algunas de las props que se pueden passar a un elemento <code>img</code>. Son la base de la reutilización de componentes.
+
+Los props funcionan de manera similar a los atributos en HTML, ya que permiten pasar información a los componentes. Estos valores se agrupan en un objeto llamado <code>props</code>, que se recibe como parámetro en la función del componente. Para acceder a un valor específico, se utiliza la notación de punto, por ejemplo: <code>{props.nombre}</code>.
+
+Los props se escriben en <code>camelCase</code>.
+
+Utilizando el objeto <code>props</code>:
+```jsx
+function Person(props) {
+  return(
+    <div className="person">
+      <h3>Nombre: {props.nombre}</h3>
+      <p>Edad: {props.edad}</p>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <div className="App">
+      <h1>Hola Mundo</h1>
+      <Person nombre="Pedro" edad="25" >
+    </div>
+  )
+}
+```
+
+Desestructurando los props directamente como parámetros del componente:
+```jsx
+function Person({nombre, edad}) {
+  return(
+    <div className="person">
+      <h3>Nombre: {nombre}</h3>
+      <p>Edad: {edad}</p>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <div className="App">
+      <h1>Hola Mundo</h1>
+      <Person nombre="Pedro" edad="25" />
+    </div>
+  )
+}
+```
+Las <code>props</code> deben ser inmutables, en su lugar se pueden definir constantes nuevas. En el ejemplo siguiente, podemos ver que también se pueden pasar funciones como props.
+```jsx
+// 📁 src/TwitterFollowCard.jsx
+export function TwitterFollowCard ({ formatUserName, name, userName, isFollowing }) {
+    return (
+        <article className='tw-followCard'>
+        <header className='tw-followCard-header'>
+            <img className='tw-followCard-avatar' alt="El avatar de Adri" src={`/avatar-${userName}.jpg`} />
+            <div className='tw-followCard-info'>
+                <strong>{name}</strong>
+                <span className='tw-followCard-infoUserName'>{formatUserName(userName)}</span>
+            </div>
+        </header>
+
+        <aside>
+            <button className='tw-followCard-button'>
+                Seguir
+            </button>
+        </aside>
+    </article>
+    )
+}
+```
+```jsx
+// 📁 src/App.jsx
+import './App.css'
+import { TwitterFollowCard } from './TwitterFollowCard'
+
+// ⛔️ Incorrecto
+// userName = `@${userName}`
+
+// ✅ Correcto
+const format = (userName) => `@${userName}`
+
+export function App () {
+  return (
+    <section className="App">
+      <TwitterFollowCard formatUserName={format} isFollowing name="Adri Álvarez" userName="alvarezAdri_"/>
+      <TwitterFollowCard formatUserName={format} isFollowing={false} name="Miguel Ángel Durán" userName="midudev"/>
+    </section>
+  )
+}
+```
+
+### La prop especial children
+Un <code>children</code> es lo que envuelve un elemento. Solo existe uno, no hay children nombrados.
+```jsx
+import './App.css'
+import { TwitterFollowCard } from './TwitterFollowCard'
+
+export function App () {
+  return (
+    <section className="App">
+        <TwitterFollowCard isFollowing userName="alvarezAdri_">
+            Adri Álvarez { /* <- children */ }
+        </TwitterFollowCard>
+
+        <TwitterFollowCard isFollowing={false} userName="midudev">
+            Miguel Ángel Durán { /* <- children */ }
+        </TwitterFollowCard>
+    </section>
+  )
+}
+```
+```jsx
+export function TwitterFollowCard ({ children, userName, isFollowing }) {
+  return (
+    <article className='tw-followCard'>
+      <header className='tw-followCard-header'>
+          <img className='tw-followCard-avatar' alt="El avatar de Adri" src={`/avatar-${userName}.jpg`} />
+          <div className='tw-followCard-info'>
+              <strong>{children}</strong>
+              <span className='tw-followCard-infoUserName'>@{userName}</span>
+          </div>
+      </header>
+
+      <aside>
+          <button className='tw-followCard-button'>
+              Seguir
+          </button>
+      </aside>
+  </article>
+  )
+}
+```
+
+### Valores por defecto
+```jsx
+export function TwitterFollowCard ({ name, userName = 'unknown', isFollowing }) 
+//...
+```
+
+### Pasar todas las props a la vez
+Se puede utilizar el rest operator para pasar todas las propiedades del objeto como props. Puede ser mala práctica.
+```jsx
+import './App.css'
+import { TwitterFollowCard } from './TwitterFollowCard'
+
+export function App () {
+    const adrialvarez = { isFollowing: true, userName: 'alvarezAdri_' }
+    const midudev = { isFollowing: false, userName: 'midudev' }
+
+    return (
+        <section className="App">
+            <TwitterFollowCard {... adrialvarez}>
+                Adri Álvarez
+            </TwitterFollowCard>
+            
+            <TwitterFollowCard {... midudev}>
+                Miguel Ángel Durán
+            </TwitterFollowCard>
+        </section>
+    )
+}
+```
+### Estados en React
+Los estados se usan para controlar los cambios en la interfaz. Normalmente, los estados vienen acompañados de un cambio visual.
+
+Para poder utilizar los estados de React, necesitamos el hook <code>import { userState } from 'react'</code>. Las hooks nos permiten dotar de más funcionalidad a los componentes de React en diferentes puntos del renderizado.
+
+Para definir un estado necesitamos 3 constantes:
+```jsx
+// Valor del estado por defecto 
+const state = useState(false)
+
+// Valor del estado
+const isFollowing = state[0]
+
+// Valor cuando el estado cambia
+const setIsFollowing = state[1]
+```
+
+Gracias a la desestructuración de JavaScript, estas tres líneas equivalen a:
+```jsx
+const [isFollowing, setIsFollowing] = useState(false)
+```
+
+Cuando se utiliza una prop para inicializar un estado, es una buena práctica llamarla: <code>initialIsFollowing</code>. Para cambiar los estilos según el estado utilizaremos el renderizado condicional.
+
+```jsx
+import { useState } from 'react'
+export function TwitterFollowCard ({ children, userName, initialIsFollowing}) {
+
+const [isFollowing, setIsFollowing] = useState(initialIsFollowing)
+
+const buttonClassName = isFollowing
+  ? 'tw-followCard-button is-following'
+  : 'tw-followCard-button'
+
+//...
+
+<button className={buttonClassName} onClick={handleClick}>
+  <span className='tw-followCard-text'>{text}</span>
+  <span className='tw-followCard-stopFollow'>Dejar de seguir</span>
+</button>
+
+//...
+}
+
+```
+
+> Nota:    
+Cuando un componente hijo usa <code>useState</code> con una prop del padre como valor inicial, ese valor solo se inicializa una vez, al montarse el componente. Si la prop del padre cambia después, el estado del hijo no se actualiza automáticamente.
+
+### Virtual DOM
+Cuando se utiliza código imperativo, debemos indicar exactamente qué elemento del DOM queremos cambiar.
+
+React utiliza un DOM virtual para actualizar únicamente aquello que cambia. Al renderizar, guarda una copia y lo compara con el DOM actual para detectar qué ha cambiado y actualizar únicamente esas partes.
+
+React vuelve a renderizar un componente:
+- Cuando se actualiza el estado interno.
+- Cuando un componente padre se renderiza y propaga sus cambios hacia abajo, los componentes hijos también se renderizan. Aunque el contenido del hijo no cambie ni se actualice en el DOM, en la consola podemos ver que se ha vuelto a renderizar.
+
+### Renderizado de listas
+Normalmente trabajaremos con un array de elementos que queremos renderizar como elementos. En estos casos, utilizaremos Java Script para mapear la información de cada usuario. Tenemos que envolverlo entre llaves porque lo que devuelve el mapeo de usuarios es lo que queremos renderizar.
+
+Cada elemento debe tener una <code>key</code> o identificador único para que el virtual DOM pueda identificarlo. Lo ideal sería utilizar el <code>id</code> de una base de datos.
+
+
+
+
+
+
+
+
+
+
+
+
+
